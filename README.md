@@ -12,3 +12,7 @@ The repo includes
 The CSS was mainly implemented with Bootstrap 5 and should not play a special role in this repo (e.g. not responsive).
 
 [A preview is available here.](https://web-components.frissbee.de/)
+
+### Note:
+
+For the Syntax Highlight, Emmet, IntelliSense support for HTML/CSS in ES6 template strings, the Visual Studio Code Extantion [Inline HTML](https://marketplace.visualstudio.com/items?itemName=pushqrdx.inline-html) was used. It is not necessary to use this extention, but it is very helpful. 😊
