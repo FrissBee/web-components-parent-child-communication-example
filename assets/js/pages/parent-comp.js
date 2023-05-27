@@ -76,9 +76,9 @@ class ParentComp extends HTMLElement {
 
   connectedCallback() {
     handleChildBtnOne(this, this.btnParent, this.btnParent.getAttribute('btn-event'));
-    handleChildBtnOne(this, this.leftSide, this.leftSide.getAttribute('btn-event-one'));
-    handleChildBtnOne(this, this.rightSide, this.rightSide.getAttribute('btn-event-one'));
-    handleChildBtnTwo(this, this.rightSide, this.rightSide.getAttribute('btn-event-two'));
+    handleChildBtnOne(this, this.leftSide, this.leftSide.getAttribute('btn-event-0'));
+    handleChildBtnOne(this, this.rightSide, this.rightSide.getAttribute('btn-event-0'));
+    handleChildBtnTwo(this, this.rightSide, this.rightSide.getAttribute('btn-event-1'));
   }
 }
 

@@ -43,7 +43,6 @@ class LeftSide extends HTMLElement {
     root.appendChild(template.content.cloneNode(true));
 
     this.countComp = root.querySelector('count-comp');
-    this.btnElemOne = root.querySelector('btn-elem.btn-elem-one');
     this.toggleText = root.querySelector('toggle-text');
   }
 
@@ -58,8 +57,7 @@ class LeftSide extends HTMLElement {
   }
 
   connectedCallback() {
-    this.setAttribute('btn-event-one', this.btnElemOne.getAttribute('btn-event'));
-    handleChildBtn(this.btnElemOne, this, this.btnElemOne.getAttribute('btn-event'));
+    addAllBtnEvents(this);
   }
 }
 
@@ -68,8 +66,15 @@ customElements.define('left-side', LeftSide);
 // =============================
 //  Functions
 // =============================
-function handleChildBtn(btn, elem, eventName) {
-  btn.addEventListener(eventName, (e) => {
-    elem.dispatchEvent(new CustomEvent(eventName, { detail: e.detail }));
+function handleChildBtn(elem, btn) {
+  btn.addEventListener(btn.getAttribute('btn-event'), (e) => {
+    elem.dispatchEvent(new CustomEvent(btn.getAttribute('btn-event'), { detail: e.detail }));
+  });
+}
+
+function addAllBtnEvents(elem) {
+  elem.shadowRoot.querySelectorAll('btn-elem').forEach((btn, index) => {
+    elem.setAttribute(`btn-event-${index}`, btn.getAttribute('btn-event'));
+    handleChildBtn(elem, btn);
   });
 }
