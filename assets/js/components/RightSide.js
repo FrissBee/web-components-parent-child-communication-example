@@ -25,8 +25,7 @@ template.innerHTML = /* html */ `
   <hr>
   <count-comp></count-comp>
   <div class="mt-4">
-    <!-- The default value of the attribute "btn-event" is set in "attributeChangedCallback" in its class. -->
-    <btn-elem class="btn-elem-one" class-names="btn btn-primary">Counter Right Side</btn-elem>
+    <btn-elem class="btn-elem-one">Counter Right Side</btn-elem>
   </div>
   <div class="mt-4">
     <btn-elem class="btn-elem-two" class-names="btn btn-warning" btn-event="handle-btn-click-toggle" btn-datas="Hello World">Show/Hide Text</btn-elem>
@@ -64,8 +63,8 @@ class RightSide extends HTMLElement {
   }
 
   connectedCallback() {
-    this.setAttribute('btn-event-one', this.btnElemOne.btnEvent);
-    this.setAttribute('btn-event-two', this.btnElemTwo.btnEvent);
+    this.setAttribute('btn-event-one', this.btnElemOne.getAttribute('btn-event'));
+    this.setAttribute('btn-event-two', this.btnElemTwo.getAttribute('btn-event'));
     handleChildBtn(this, this.btnElemOne);
     handleChildBtn(this, this.btnElemTwo);
   }
@@ -77,7 +76,7 @@ customElements.define('right-side', RightSide);
 //  Functions
 // =============================
 function handleChildBtn(elem, btn) {
-  btn.addEventListener(btn.btnEvent, (e) => {
-    elem.dispatchEvent(new CustomEvent(btn.btnEvent, { detail: e.detail }));
+  btn.addEventListener(btn.getAttribute('btn-event'), (e) => {
+    elem.dispatchEvent(new CustomEvent(btn.getAttribute('btn-event'), { detail: e.detail }));
   });
 }

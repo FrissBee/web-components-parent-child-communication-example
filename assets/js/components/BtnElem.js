@@ -25,16 +25,12 @@ class BtnElem extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
-    this.classNames = this.hasAttribute('class-names') ? this.getAttribute('class-names') : 'btn btn-primary';
-    this.btnDatas = this.hasAttribute('btn-datas') ? this.getAttribute('btn-datas') : 'Default Value';
-    this.btnEvent = this.hasAttribute('btn-event') ? this.getAttribute('btn-event') : 'handle-btn-click';
-
     this.btn = root.querySelector('button');
   }
 
   connectedCallback() {
-    this.btn.classList = this.classNames;
-    if (!this.hasAttribute('btn-event')) this.setAttribute('btn-event', this.btnEvent);
+    this.btn.classList = this.hasAttribute('class-names') ? this.getAttribute('class-names') : 'btn btn-primary';
+    if (!this.hasAttribute('btn-event')) this.setAttribute('btn-event', 'handle-btn-click');
     handleChildBtn(this);
   }
 }
@@ -46,6 +42,7 @@ customElements.define('btn-elem', BtnElem);
 // =============================
 function handleChildBtn(elem) {
   elem.btn.addEventListener('click', (e) => {
-    elem.dispatchEvent(new CustomEvent(elem.btnEvent, { detail: elem.btnDatas }));
+    const btnDatas = elem.hasAttribute('btn-datas') ? elem.getAttribute('btn-datas') : 'Default Value';
+    elem.dispatchEvent(new CustomEvent(elem.getAttribute('btn-event'), { detail: btnDatas }));
   });
 }

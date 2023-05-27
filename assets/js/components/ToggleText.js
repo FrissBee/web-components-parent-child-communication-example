@@ -23,8 +23,6 @@ class ToggleText extends HTMLElement {
     super();
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
-
-    this.parentOutput = root.querySelector('.parent-output');
   }
 }
 

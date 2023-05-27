@@ -30,19 +30,16 @@ template.innerHTML = /* html */ `
     <hr>
     <div class="d-flex">
     <div>
-      <!-- The default value of the attribute "btn-event" is set in "attributeChangedCallback" in its class. -->
-      <btn-elem class="me-4 btn-elem-parent" class-names="btn btn-secondary btn-parent">Counter Parent</btn-elem>
+      <btn-elem class="me-4 btn-elem-parent" class-names="btn btn-secondary">Counter Parent</btn-elem>
     </div>
     <div>
-      <!-- The attribute "count" is not really necessary here, because it is set in "attributeChangedCallback" in its class. -->
-      <count-comp count="0"></count-comp>
+      <count-comp></count-comp>
       <toggle-text></toggle-text>
     </div>
     </div>
   </div>
   <div class="d-flex">
-    <!-- Attributes "count" and "output" is not really necessary here, because it is set in "attributeChangedCallback" in its class. -->
-    <left-side class="me-5 border rounded p-4" count="111" output=""></left-side>
+    <left-side class="me-5 border rounded p-4"></left-side>
     <right-side class="me-5 border rounded p-4"></right-side>
   </div>
 </div>
@@ -95,9 +92,7 @@ function setCounter(elem) {
 }
 
 function handleChildBtnOne(elem, btn, eventName) {
-  btn.addEventListener(eventName, (e) => {
-    setCounter(elem);
-  });
+  btn.addEventListener(eventName, (e) => setCounter(elem));
 }
 
 function handleChildBtnTwo(elem, btn, eventName) {

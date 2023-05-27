@@ -25,7 +25,6 @@ template.innerHTML = /* html */ `
   <hr>
   <count-comp></count-comp>
   <div class="mt-4">
-    <!-- The default value of the attribute "btn-event" is set in "attributeChangedCallback" in its class. -->
     <btn-elem class="btn-elem-one" class-names="btn btn-success">Counter Left Side</btn-elem>
   </div>
   <div class="mt-4">
@@ -59,8 +58,8 @@ class LeftSide extends HTMLElement {
   }
 
   connectedCallback() {
-    this.setAttribute('btn-event-one', this.btnElemOne.btnEvent);
-    handleChildBtn(this.btnElemOne, this, this.btnElemOne.btnEvent);
+    this.setAttribute('btn-event-one', this.btnElemOne.getAttribute('btn-event'));
+    handleChildBtn(this.btnElemOne, this, this.btnElemOne.getAttribute('btn-event'));
   }
 }
 
