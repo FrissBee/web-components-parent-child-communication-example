@@ -42,8 +42,8 @@ class CountComp extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log(' Count Comp attributeChangedCallback', name, oldValue, newValue);
-    if (name === 'count') this.counterOutput.textContent = newValue;
+    // console.log('Count Comp attributeChangedCallback', name, oldValue, newValue);
+    this.counterOutput.textContent = newValue;
   }
 }
 

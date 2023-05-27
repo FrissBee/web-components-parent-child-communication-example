@@ -64,6 +64,8 @@ class RightSide extends HTMLElement {
   }
 
   connectedCallback() {
+    this.setAttribute('btn-event-one', this.btnElemOne.btnEvent);
+    this.setAttribute('btn-event-two', this.btnElemTwo.btnEvent);
     handleChildBtn(this, this.btnElemOne);
     handleChildBtn(this, this.btnElemTwo);
   }
@@ -75,5 +77,7 @@ customElements.define('right-side', RightSide);
 //  Functions
 // =============================
 function handleChildBtn(elem, btn) {
-  btn.addEventListener(btn.btnEvent, (e) => elem.dispatchEvent(new CustomEvent(btn.btnEvent, { detail: e.detail })));
+  btn.addEventListener(btn.btnEvent, (e) => {
+    elem.dispatchEvent(new CustomEvent(btn.btnEvent, { detail: e.detail }));
+  });
 }

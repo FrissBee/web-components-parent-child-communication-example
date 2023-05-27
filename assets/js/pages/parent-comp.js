@@ -71,17 +71,17 @@ class ParentComp extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log('parent-child', name, oldValue, newValue);
+    // console.log('parent-comp attributeChangedCallback', name, oldValue, newValue);
     this.leftSide.setAttribute('count', newValue);
     this.rightSide.setAttribute('count', newValue);
     this.countComp.setAttribute('count', newValue);
   }
 
   connectedCallback() {
-    handleChildBtnOne(this, this.btnParent, this.btnParent.btnEvent);
-    handleChildBtnOne(this, this.leftSide, this.leftSide.shadowRoot.querySelector('btn-elem.btn-elem-one').btnEvent);
-    handleChildBtnOne(this, this.rightSide, this.rightSide.shadowRoot.querySelector('btn-elem.btn-elem-one').btnEvent);
-    handleChildBtnTwo(this, this.rightSide.shadowRoot.querySelector('btn-elem.btn-elem-two').btnEvent);
+    handleChildBtnOne(this, this.btnParent, this.btnParent.getAttribute('btn-event'));
+    handleChildBtnOne(this, this.leftSide, this.leftSide.getAttribute('btn-event-one'));
+    handleChildBtnOne(this, this.rightSide, this.rightSide.getAttribute('btn-event-one'));
+    handleChildBtnTwo(this, this.rightSide, this.rightSide.getAttribute('btn-event-two'));
   }
 }
 
@@ -95,11 +95,13 @@ function setCounter(elem) {
 }
 
 function handleChildBtnOne(elem, btn, eventName) {
-  btn.addEventListener(eventName, (e) => setCounter(elem));
+  btn.addEventListener(eventName, (e) => {
+    setCounter(elem);
+  });
 }
 
-function handleChildBtnTwo(elem, eventName) {
-  elem.rightSide.addEventListener(eventName, (e) => {
+function handleChildBtnTwo(elem, btn, eventName) {
+  btn.addEventListener(eventName, (e) => {
     elem.toggleWithBtnTwo = !elem.toggleWithBtnTwo;
 
     if (elem.toggleWithBtnTwo === true) {
