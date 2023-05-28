@@ -30,7 +30,7 @@ template.innerHTML = /* html */ `
     <hr>
     <div class="d-flex">
     <div>
-      <btn-elem class="me-4 btn-elem-parent" class-names="btn btn-secondary" btn-event="handle-btn-click-count">Counter Parent</btn-elem>
+      <btn-elem class="me-4 btn-elem-parent" class-names="btn btn-secondary" btn-event="handle-btn-click-count">Counter increment</btn-elem>
     </div>
     <div>
       <count-comp></count-comp>
@@ -76,6 +76,7 @@ class ParentComp extends HTMLElement {
   connectedCallback() {
     handleChildBtnCount(this, this.btnParent, this.btnParent.getAttribute('btn-event'));
     handleChildBtnCount(this, this.leftSide, this.leftSide.getAttribute('btn-event-count'));
+    handleChildBtnReset(this, this.leftSide, this.leftSide.getAttribute('btn-event-reset'));
     handleChildBtnCount(this, this.rightSide, this.rightSide.getAttribute('btn-event-count'));
     handleChildBtnToggle(this, this.rightSide, this.rightSide.getAttribute('btn-event-toggle'));
   }
@@ -86,12 +87,20 @@ customElements.define('parent-comp', ParentComp);
 // =============================
 //  Functions
 // =============================
-function setCounter(elem) {
+function incrementCounter(elem) {
   elem.setAttribute('count', Number(elem.getAttribute('count')) + 1);
 }
 
 function handleChildBtnCount(elem, btn, eventName) {
-  btn.addEventListener(eventName, (e) => setCounter(elem));
+  btn.addEventListener(eventName, (e) => incrementCounter(elem));
+}
+
+function resetCounter(elem) {
+  elem.setAttribute('count', '0');
+}
+
+function handleChildBtnReset(elem, btn, eventName) {
+  btn.addEventListener(eventName, (e) => resetCounter(elem));
 }
 
 function handleChildBtnToggle(elem, btn, eventName) {

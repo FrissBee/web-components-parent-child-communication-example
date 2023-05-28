@@ -25,7 +25,10 @@ template.innerHTML = /* html */ `
   <hr>
   <count-comp></count-comp>
   <div class="mt-4">
-    <btn-elem class="btn-elem-count" class-names="btn btn-success" btn-event="handle-btn-click-count">Counter Left Side</btn-elem>
+    <btn-elem class="btn-elem-count" class-names="btn btn-success" btn-event="handle-btn-click-count">Counter increment</btn-elem>
+  </div>
+  <div class="mt-4">
+    <btn-elem class="btn-elem-reset" class-names="btn btn-danger" btn-event="handle-btn-click-reset">Counter reset</btn-elem>
   </div>
   <div class="mt-4">
     <toggle-text></toggle-text>
@@ -43,6 +46,7 @@ class LeftSide extends HTMLElement {
     root.appendChild(template.content.cloneNode(true));
 
     this.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
+    this.btnElemReset = root.querySelector('btn-elem.btn-elem-reset');
     this.countComp = root.querySelector('count-comp');
     this.toggleText = root.querySelector('toggle-text');
   }
@@ -58,7 +62,9 @@ class LeftSide extends HTMLElement {
 
   connectedCallback() {
     this.setAttribute('btn-event-count', this.btnElemCount.getAttribute('btn-event'));
+    this.setAttribute('btn-event-reset', this.btnElemReset.getAttribute('btn-event'));
     handleChildBtn(this, this.btnElemCount);
+    handleChildBtn(this, this.btnElemReset);
   }
 }
 

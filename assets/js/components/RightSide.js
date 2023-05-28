@@ -25,7 +25,7 @@ template.innerHTML = /* html */ `
   <hr>
   <count-comp></count-comp>
   <div class="mt-4">
-    <btn-elem class="btn-elem-count" btn-event="handle-btn-click-count">Counter Right Side</btn-elem>
+    <btn-elem class="btn-elem-count" btn-event="handle-btn-click-count">Counter increment</btn-elem>
   </div>
   <div class="mt-4">
     <btn-elem class="btn-elem-toggle" class-names="btn btn-warning" btn-event="handle-btn-click-toggle" btn-datas="Hello World">Show/Hide Text</btn-elem>
