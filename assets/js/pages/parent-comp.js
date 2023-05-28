@@ -30,7 +30,7 @@ template.innerHTML = /* html */ `
     <hr>
     <div class="d-flex">
     <div>
-      <btn-elem class="me-4 btn-elem-parent" class-names="btn btn-secondary">Counter Parent</btn-elem>
+      <btn-elem class="me-4 btn-elem-parent" class-names="btn btn-secondary" btn-event="handle-btn-click-count">Counter Parent</btn-elem>
     </div>
     <div>
       <count-comp></count-comp>
@@ -68,17 +68,16 @@ class ParentComp extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log('parent-comp attributeChangedCallback', name, oldValue, newValue);
     this.leftSide.setAttribute('count', newValue);
     this.rightSide.setAttribute('count', newValue);
     this.countComp.setAttribute('count', newValue);
   }
 
   connectedCallback() {
-    handleChildBtnOne(this, this.btnParent, this.btnParent.getAttribute('btn-event'));
-    handleChildBtnOne(this, this.leftSide, this.leftSide.getAttribute('btn-event-0'));
-    handleChildBtnOne(this, this.rightSide, this.rightSide.getAttribute('btn-event-0'));
-    handleChildBtnTwo(this, this.rightSide, this.rightSide.getAttribute('btn-event-1'));
+    handleChildBtnCount(this, this.btnParent, this.btnParent.getAttribute('btn-event'));
+    handleChildBtnCount(this, this.leftSide, this.leftSide.getAttribute('btn-event-count'));
+    handleChildBtnCount(this, this.rightSide, this.rightSide.getAttribute('btn-event-count'));
+    handleChildBtnToggle(this, this.rightSide, this.rightSide.getAttribute('btn-event-toggle'));
   }
 }
 
@@ -91,11 +90,11 @@ function setCounter(elem) {
   elem.setAttribute('count', Number(elem.getAttribute('count')) + 1);
 }
 
-function handleChildBtnOne(elem, btn, eventName) {
+function handleChildBtnCount(elem, btn, eventName) {
   btn.addEventListener(eventName, (e) => setCounter(elem));
 }
 
-function handleChildBtnTwo(elem, btn, eventName) {
+function handleChildBtnToggle(elem, btn, eventName) {
   btn.addEventListener(eventName, (e) => {
     elem.toggleWithBtnTwo = !elem.toggleWithBtnTwo;
 

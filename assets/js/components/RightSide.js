@@ -25,10 +25,10 @@ template.innerHTML = /* html */ `
   <hr>
   <count-comp></count-comp>
   <div class="mt-4">
-    <btn-elem class="btn-elem-one">Counter Right Side</btn-elem>
+    <btn-elem class="btn-elem-count" btn-event="handle-btn-click-count">Counter Right Side</btn-elem>
   </div>
   <div class="mt-4">
-    <btn-elem class="btn-elem-two" class-names="btn btn-warning" btn-event="handle-btn-click-toggle" btn-datas="Hello World">Show/Hide Text</btn-elem>
+    <btn-elem class="btn-elem-toggle" class-names="btn btn-warning" btn-event="handle-btn-click-toggle" btn-datas="Hello World">Show/Hide Text</btn-elem>
   </div>
   <div class="mt-4">
     <div class="mt-4 output-right-side"></div>
@@ -46,6 +46,8 @@ class RightSide extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
+    this.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
+    this.btnElemToggle = root.querySelector('btn-elem.btn-elem-toggle');
     this.countComp = root.querySelector('count-comp');
     this.toggleText = root.querySelector('toggle-text');
   }
@@ -55,13 +57,15 @@ class RightSide extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log('Right Side attributeChangedCallback', name, oldValue, newValue);
     if (name === 'count') this.countComp.setAttribute('count', newValue);
     if (name === 'output') this.toggleText.textContent = newValue;
   }
 
   connectedCallback() {
-    addAllBtnEvents(this);
+    this.setAttribute('btn-event-count', this.btnElemCount.getAttribute('btn-event'));
+    this.setAttribute('btn-event-toggle', this.btnElemToggle.getAttribute('btn-event'));
+    handleChildBtn(this, this.btnElemCount);
+    handleChildBtn(this, this.btnElemToggle);
   }
 }
 
@@ -71,14 +75,8 @@ customElements.define('right-side', RightSide);
 //  Functions
 // =============================
 function handleChildBtn(elem, btn) {
-  btn.addEventListener(btn.getAttribute('btn-event'), (e) => {
-    elem.dispatchEvent(new CustomEvent(btn.getAttribute('btn-event'), { detail: e.detail }));
-  });
-}
-
-function addAllBtnEvents(elem) {
-  elem.shadowRoot.querySelectorAll('btn-elem').forEach((btn, index) => {
-    elem.setAttribute(`btn-event-${index}`, btn.getAttribute('btn-event'));
-    handleChildBtn(elem, btn);
+  const btnEvent = btn.getAttribute('btn-event');
+  btn.addEventListener(btnEvent, (e) => {
+    elem.dispatchEvent(new CustomEvent(btnEvent, { detail: e.detail }));
   });
 }

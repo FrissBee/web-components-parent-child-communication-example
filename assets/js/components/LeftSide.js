@@ -25,7 +25,7 @@ template.innerHTML = /* html */ `
   <hr>
   <count-comp></count-comp>
   <div class="mt-4">
-    <btn-elem class="btn-elem-one" class-names="btn btn-success">Counter Left Side</btn-elem>
+    <btn-elem class="btn-elem-count" class-names="btn btn-success" btn-event="handle-btn-click-count">Counter Left Side</btn-elem>
   </div>
   <div class="mt-4">
     <toggle-text></toggle-text>
@@ -42,6 +42,7 @@ class LeftSide extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
+    this.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
     this.countComp = root.querySelector('count-comp');
     this.toggleText = root.querySelector('toggle-text');
   }
@@ -51,13 +52,13 @@ class LeftSide extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    // console.log('Left Side attributeChangedCallback', name, oldValue, newValue);
     if (name === 'count') this.countComp.setAttribute('count', newValue);
     else if (name === 'output') this.toggleText.textContent = newValue;
   }
 
   connectedCallback() {
-    addAllBtnEvents(this);
+    this.setAttribute('btn-event-count', this.btnElemCount.getAttribute('btn-event'));
+    handleChildBtn(this, this.btnElemCount);
   }
 }
 
@@ -67,14 +68,8 @@ customElements.define('left-side', LeftSide);
 //  Functions
 // =============================
 function handleChildBtn(elem, btn) {
-  btn.addEventListener(btn.getAttribute('btn-event'), (e) => {
-    elem.dispatchEvent(new CustomEvent(btn.getAttribute('btn-event'), { detail: e.detail }));
-  });
-}
-
-function addAllBtnEvents(elem) {
-  elem.shadowRoot.querySelectorAll('btn-elem').forEach((btn, index) => {
-    elem.setAttribute(`btn-event-${index}`, btn.getAttribute('btn-event'));
-    handleChildBtn(elem, btn);
+  const btnEvent = btn.getAttribute('btn-event');
+  btn.addEventListener(btnEvent, (e) => {
+    elem.dispatchEvent(new CustomEvent(btnEvent, { detail: e.detail }));
   });
 }
