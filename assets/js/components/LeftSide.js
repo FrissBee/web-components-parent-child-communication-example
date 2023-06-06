@@ -7,11 +7,11 @@ const template = document.createElement('template');
 
 template.innerHTML = /* html */ `
 <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-    crossorigin="anonymous"
-  />
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+  crossorigin="anonymous"
+/>
 
 <style>
 .left-side-container{
@@ -45,10 +45,22 @@ class LeftSide extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
-    this.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
-    this.btnElemReset = root.querySelector('btn-elem.btn-elem-reset');
-    this.countComp = root.querySelector('count-comp');
-    this.toggleText = root.querySelector('toggle-text');
+    this._toggleTextOutput = [];
+
+    this.DOM = {};
+    this.DOM.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
+    this.DOM.btnElemReset = root.querySelector('btn-elem.btn-elem-reset');
+    this.DOM.countComp = root.querySelector('count-comp');
+    this.DOM.toggleText = root.querySelector('toggle-text');
+  }
+
+  set toggleTextOutput(value) {
+    this._toggleTextOutput = value;
+    this.DOM.toggleText.output = value;
+  }
+
+  get toggleTextOutput() {
+    return this._toggleTextOutput;
   }
 
   static get observedAttributes() {
@@ -56,15 +68,15 @@ class LeftSide extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'count') this.countComp.setAttribute('count', newValue);
-    else if (name === 'output') this.toggleText.textContent = newValue;
+    if (name === 'count') this.DOM.countComp.setAttribute('count', newValue);
+    else if (name === 'output') this.DOM.toggleText.textContent = newValue;
   }
 
   connectedCallback() {
-    this.setAttribute('btn-event-count', this.btnElemCount.getAttribute('btn-event'));
-    this.setAttribute('btn-event-reset', this.btnElemReset.getAttribute('btn-event'));
-    handleChildBtn(this, this.btnElemCount);
-    handleChildBtn(this, this.btnElemReset);
+    this.setAttribute('btn-event-count', this.DOM.btnElemCount.getAttribute('btn-event'));
+    this.setAttribute('btn-event-reset', this.DOM.btnElemReset.getAttribute('btn-event'));
+    handleBtnClick(this, this.DOM.btnElemCount);
+    handleBtnClick(this, this.DOM.btnElemReset);
   }
 }
 
@@ -73,7 +85,7 @@ customElements.define('left-side', LeftSide);
 // =============================
 //  Functions
 // =============================
-function handleChildBtn(elem, btn) {
+function handleBtnClick(elem, btn) {
   const btnEvent = btn.getAttribute('btn-event');
   btn.addEventListener(btnEvent, (e) => {
     elem.dispatchEvent(new CustomEvent(btnEvent, { detail: e.detail }));

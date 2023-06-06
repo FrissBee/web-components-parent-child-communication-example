@@ -34,7 +34,8 @@ class CountComp extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
-    this.counterOutput = root.querySelector('.counter-output');
+    this.DOM = {};
+    this.DOM.counterOutput = root.querySelector('.counter-output');
   }
 
   static get observedAttributes() {
@@ -42,7 +43,7 @@ class CountComp extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    this.counterOutput.textContent = newValue;
+    this.DOM.counterOutput.textContent = newValue;
   }
 }
 

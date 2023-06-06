@@ -25,13 +25,14 @@ class BtnElem extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
-    this.btn = root.querySelector('button');
+    this.DOM = {};
+    this.DOM.btn = root.querySelector('button');
   }
 
   connectedCallback() {
-    this.btn.classList = this.hasAttribute('class-names') ? this.getAttribute('class-names') : 'btn btn-primary';
+    this.DOM.btn.classList = this.hasAttribute('class-names') ? this.getAttribute('class-names') : 'btn btn-primary';
     if (!this.hasAttribute('btn-event')) this.setAttribute('btn-event', 'handle-btn-click');
-    handleChildBtn(this);
+    handleBtnClick(this);
   }
 }
 
@@ -40,8 +41,8 @@ customElements.define('btn-elem', BtnElem);
 // =============================
 //  Functions
 // =============================
-function handleChildBtn(elem) {
-  elem.btn.addEventListener('click', (e) => {
+function handleBtnClick(elem) {
+  elem.DOM.btn.addEventListener('click', (e) => {
     const btnDatas = elem.hasAttribute('btn-datas') ? elem.getAttribute('btn-datas') : 'Default Value';
     elem.dispatchEvent(new CustomEvent(elem.getAttribute('btn-event'), { detail: btnDatas }));
   });

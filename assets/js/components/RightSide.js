@@ -7,11 +7,11 @@ const template = document.createElement('template');
 
 template.innerHTML = /* html */ `
 <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
-    crossorigin="anonymous"
-  />
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+  crossorigin="anonymous"
+/>
 
 <style>
 .right-side-container{
@@ -28,7 +28,7 @@ template.innerHTML = /* html */ `
     <btn-elem class="btn-elem-count" btn-event="handle-btn-click-count">Counter increment</btn-elem>
   </div>
   <div class="mt-4">
-    <btn-elem class="btn-elem-toggle" class-names="btn btn-warning" btn-event="handle-btn-click-toggle" btn-datas="Hello World">Show/Hide Text</btn-elem>
+    <btn-elem class="btn-elem-toggle" class-names="btn btn-warning" btn-event="handle-btn-click-toggle" btn-datas="Hey!">Show/Hide Text</btn-elem>
   </div>
   <div class="mt-4">
     <div class="mt-4 output-right-side"></div>
@@ -46,10 +46,22 @@ class RightSide extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
-    this.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
-    this.btnElemToggle = root.querySelector('btn-elem.btn-elem-toggle');
-    this.countComp = root.querySelector('count-comp');
-    this.toggleText = root.querySelector('toggle-text');
+    this._toggleTextOutput = [];
+
+    this.DOM = {};
+    this.DOM.btnElemCount = root.querySelector('btn-elem.btn-elem-count');
+    this.DOM.btnElemToggle = root.querySelector('btn-elem.btn-elem-toggle');
+    this.DOM.countComp = root.querySelector('count-comp');
+    this.DOM.toggleText = root.querySelector('toggle-text');
+  }
+
+  set toggleTextOutput(value) {
+    this._toggleTextOutput = value;
+    this.DOM.toggleText.output = value;
+  }
+
+  get toggleTextOutput() {
+    return this._toggleTextOutput;
   }
 
   static get observedAttributes() {
@@ -57,15 +69,15 @@ class RightSide extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (name === 'count') this.countComp.setAttribute('count', newValue);
-    if (name === 'output') this.toggleText.textContent = newValue;
+    if (name === 'count') this.DOM.countComp.setAttribute('count', newValue);
+    if (name === 'output') this.DOM.toggleText.textContent = newValue;
   }
 
   connectedCallback() {
-    this.setAttribute('btn-event-count', this.btnElemCount.getAttribute('btn-event'));
-    this.setAttribute('btn-event-toggle', this.btnElemToggle.getAttribute('btn-event'));
-    handleChildBtn(this, this.btnElemCount);
-    handleChildBtn(this, this.btnElemToggle);
+    this.setAttribute('btn-event-count', this.DOM.btnElemCount.getAttribute('btn-event'));
+    this.setAttribute('btn-event-toggle', this.DOM.btnElemToggle.getAttribute('btn-event'));
+    handleBtnClick(this, this.DOM.btnElemCount);
+    handleBtnClick(this, this.DOM.btnElemToggle);
   }
 }
 
@@ -74,7 +86,7 @@ customElements.define('right-side', RightSide);
 // =============================
 //  Functions
 // =============================
-function handleChildBtn(elem, btn) {
+function handleBtnClick(elem, btn) {
   const btnEvent = btn.getAttribute('btn-event');
   btn.addEventListener(btnEvent, (e) => {
     elem.dispatchEvent(new CustomEvent(btnEvent, { detail: e.detail }));

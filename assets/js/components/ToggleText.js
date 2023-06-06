@@ -5,14 +5,12 @@ const template = document.createElement('template');
 
 template.innerHTML = /* html */ `
 <style>
-  .parent-output{
+  .toggle-output{
     color: red
   }
 </style>
 
-<div class="parent-output">
-  <slot></slot>
-</div>
+<div class="toggle-output"></div>
 `;
 
 // =============================
@@ -23,6 +21,20 @@ class ToggleText extends HTMLElement {
     super();
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
+
+    this._output = [];
+
+    this.DOM = {};
+    this.DOM.toggleOutput = root.querySelector('div.toggle-output');
+  }
+
+  set output(value) {
+    this._output = value;
+    this.DOM.toggleOutput.textContent = value.join(' ');
+  }
+
+  get output() {
+    return this._output;
   }
 }
 

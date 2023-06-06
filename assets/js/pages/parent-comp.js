@@ -54,13 +54,15 @@ class ParentComp extends HTMLElement {
     const root = this.attachShadow({ mode: 'open' });
     root.appendChild(template.content.cloneNode(true));
 
-    this.toggleWithBtnTwo = false;
+    this._toggle = false;
+    this._toggleTextDatas = ['Hallo', 'World'];
 
-    this.countComp = root.querySelector('count-comp');
-    this.leftSide = root.querySelector('left-side');
-    this.rightSide = root.querySelector('right-side');
-    this.btnParent = root.querySelector('btn-elem.btn-elem-parent');
-    this.toggleText = root.querySelector('toggle-text');
+    this.DOM = {};
+    this.DOM.countComp = root.querySelector('count-comp');
+    this.DOM.leftSide = root.querySelector('left-side');
+    this.DOM.rightSide = root.querySelector('right-side');
+    this.DOM.btnElemParent = root.querySelector('btn-elem.btn-elem-parent');
+    this.DOM.toggleText = root.querySelector('toggle-text');
   }
 
   static get observedAttributes() {
@@ -68,17 +70,25 @@ class ParentComp extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    this.leftSide.setAttribute('count', newValue);
-    this.rightSide.setAttribute('count', newValue);
-    this.countComp.setAttribute('count', newValue);
+    this.DOM.leftSide.setAttribute('count', newValue);
+    this.DOM.rightSide.setAttribute('count', newValue);
+    this.DOM.countComp.setAttribute('count', newValue);
   }
 
   connectedCallback() {
-    handleChildBtnCount(this, this.btnParent, this.btnParent.getAttribute('btn-event'));
-    handleChildBtnCount(this, this.leftSide, this.leftSide.getAttribute('btn-event-count'));
-    handleChildBtnReset(this, this.leftSide, this.leftSide.getAttribute('btn-event-reset'));
-    handleChildBtnCount(this, this.rightSide, this.rightSide.getAttribute('btn-event-count'));
-    handleChildBtnToggle(this, this.rightSide, this.rightSide.getAttribute('btn-event-toggle'));
+    handleBtnCount(this, this.DOM.btnElemParent, this.DOM.btnElemParent.getAttribute('btn-event'));
+    handleBtnCount(this, this.DOM.leftSide, this.DOM.leftSide.getAttribute('btn-event-count'));
+    handleBtnCount(this, this.DOM.rightSide, this.DOM.rightSide.getAttribute('btn-event-count'));
+
+    handleBtnReset(this, this.DOM.leftSide, this.DOM.leftSide.getAttribute('btn-event-reset'));
+
+    handleBtnToggle(
+      this,
+      this.DOM.rightSide,
+      this.DOM.rightSide.getAttribute('btn-event-toggle'),
+      this.DOM.toggleText,
+      this._toggleTextDatas
+    );
   }
 }
 
@@ -91,7 +101,7 @@ function incrementCounter(elem) {
   elem.setAttribute('count', Number(elem.getAttribute('count')) + 1);
 }
 
-function handleChildBtnCount(elem, btn, eventName) {
+function handleBtnCount(elem, btn, eventName) {
   btn.addEventListener(eventName, (e) => incrementCounter(elem));
 }
 
@@ -99,22 +109,25 @@ function resetCounter(elem) {
   elem.setAttribute('count', '0');
 }
 
-function handleChildBtnReset(elem, btn, eventName) {
+function handleBtnReset(elem, btn, eventName) {
   btn.addEventListener(eventName, (e) => resetCounter(elem));
 }
 
-function handleChildBtnToggle(elem, btn, eventName) {
+function handleBtnToggle(elem, btn, eventName, toggleText, toggleTextDatas) {
   btn.addEventListener(eventName, (e) => {
-    elem.toggleWithBtnTwo = !elem.toggleWithBtnTwo;
+    elem.toggle = !elem.toggle;
 
-    if (elem.toggleWithBtnTwo === true) {
-      elem.toggleText.textContent = e.detail;
-      elem.leftSide.setAttribute('output', e.detail);
-      elem.rightSide.setAttribute('output', e.detail);
+    if (elem.toggle === true) {
+      toggleText.output = toggleTextDatas;
+      elem.DOM.leftSide.toggleTextOutput = toggleTextDatas;
+      elem.DOM.rightSide.toggleTextOutput = toggleTextDatas;
     } else {
-      elem.toggleText.textContent = '';
-      elem.leftSide.setAttribute('output', '');
-      elem.rightSide.setAttribute('output', '');
+      toggleText.output = [];
+      elem.DOM.leftSide.toggleTextOutput = [];
+      elem.DOM.rightSide.toggleTextOutput = [];
     }
+
+    // Datas from the Button of the attribute 'btn-datas':
+    // console.log(e.detail);
   });
 }
