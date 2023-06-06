@@ -76,6 +76,8 @@ class ParentComp extends HTMLElement {
   }
 
   connectedCallback() {
+    if (!this.hasAttribute('count')) this.setAttribute('count', '0');
+
     handleBtnCount(this, this.DOM.btnElemParent, this.DOM.btnElemParent.getAttribute('btn-event'));
     handleBtnCount(this, this.DOM.leftSide, this.DOM.leftSide.getAttribute('btn-event-count'));
     handleBtnCount(this, this.DOM.rightSide, this.DOM.rightSide.getAttribute('btn-event-count'));
